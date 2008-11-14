@@ -1,15 +1,14 @@
 ;(function( $ ){
-	$.fn.magicpreview = function(options) {
-		var idstr = "preview_";
-		$('*[id^="'+idstr+'"]').each(function () {
-			var e = this;
-			var o = $(this).text();
-			var el = $('form#submitacode').find('*[name="'+$(this).attr('id').substr(idstr.length)+'"]');
-			el.keyup(function () {
+	$.fn.magicpreview = function(str, options) {
+		
+		return this.filter(':text, :radio, :checkbox, select, textarea').each(function () {
+			var n = '#' + str + $(this).attr('id');
+			var o = $(n).text();
+			$(this).keyup(function () {
 				var st = ($(this).val().replace(/\n|\r/mg, '') != '') ? $(this).val() : o;
-				( $(this).is('textarea') ) ? $(e).html(st.replace(/\r|\n/mg, '<br />')) : $(e).text(st);
+				( $(this).is('textarea') ) ? $(n).html(st.replace(/\r|\n/mg, '<br />')) : $(n).text(st);
 			});
-			el.trigger('keyup');
+			$(this).trigger('keyup');
 		});
 	}
 })( jQuery );
