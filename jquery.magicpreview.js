@@ -1,7 +1,14 @@
 ;(function( $ ){
 	$.fn.magicpreview = function(str, options) {
 		
-		var options = $.extend({}, $.fn.magicpreview.options, options);
+		if (typeof str == "object" && typeof options == "undefined") // If function(options)
+		{
+			options = str;
+			str = '';
+		}
+		
+		str = str || '';
+		options = $.extend({}, $.fn.magicpreview.options, options);
 		
 		function change (e, n, o, typ, onload)
 		{
