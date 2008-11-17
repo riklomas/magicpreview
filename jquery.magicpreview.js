@@ -10,11 +10,12 @@
 		str = str || '';
 		options = $.extend({}, $.fn.magicpreview.options, options);
 		
-		function change (e, n, o, typ, onload)
+		function change (e, n, o, fn, onload)
 		{
 			if (options.onBefore() && (options.onLoad || !onload))
 			{
-				var st = $.fn.magicpreview.events[typ].f(e, o);
+				var st = fn(e, o);
+				console.log(fn);
 				
 				if (o != st) 
 				{
@@ -43,21 +44,23 @@
 			var n = '#' + str + $(this).attr('name');
 			var o = $(n).text();
 			
-			for (i in $.fn.magicpreview.events)
+			for (var m = 0; m < $.fn.magicpreview.events.length; m++)
 			{
-				var f = $.fn.magicpreview.events[i];
+				var f = $.fn.magicpreview.events[m];
+				var fn = $.fn.magicpreview.events[m].f;
+				
 				if ($(e).is(f.on)) 
 				{
 					for (j in f.e)
 					{
 						if (f.e[j] == 'load')
 						{
-							change(e, n, o, 'text', true);
+							change(e, n, o, fn, true);
 						}
 						else
 						{
 							$(e).bind(f.e[j], function () {
-								change(e, n, o, 'text', false);
+								change(e, n, o, fn, false);
 							});
 						}
 					}
@@ -66,8 +69,7 @@
 		});
 	};
 	
-	$.fn.magicpreview.events = {
-		'text': {
+	$.fn.magicpreview.events = [{
 			'on': ':text, textarea',
 			'e': ['keyup', 'load'],
 			'f': function (e, o) {
@@ -75,22 +77,20 @@
 				st = ( $(e).is('textarea') ) ? st.replace(/\r|\n/mg, '<br />') : st;
 				return st;
 			}
-		},
-		'check': {
+		}, {
 			'on': ':checkbox, :radio',
-			'e': ['click', 'load'],
+			'e': ['click', 'change', 'load'],
 			'f': function (e, o) {
+				console.log( $(e).is(':checked') );
 				return ($(e).is(':checked')) ? $(e).val() : o ;
 			}
-		},
-		'select': {
+		}, {
 			'on': 'select',
 			'e': ['change', 'load'],
 			'f': function (e, o) {
 				return $(e).val();
 			}
-		}
-	};
+		}];
 		
 	$.fn.magicpreview.options = {
 		'change': 'html',
