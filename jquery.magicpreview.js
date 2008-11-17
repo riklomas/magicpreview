@@ -8,12 +8,12 @@
 			if (options.onBefore() && (options.onLoad || !onload))
 			{
 				var st = $.fn.magicpreview.events[typ].f(e, o);
-
+				
 				if (o != st) 
 				{
-					st = options.strBefore + st + options.strAfter;
+					st = options.formatValue(st);
 				}
-
+				
 				if (options.change == 'html') 
 				{
 					$(n).html(st);
@@ -26,7 +26,7 @@
 				{
 					$(n).attr(options.change, st);
 				}
-
+				
 				options.onAfter();
 			}
 		}
@@ -43,11 +43,14 @@
 				{
 					for (j in f.e)
 					{
-						for (k in f.e[j])
+						if (f.e[j] == 'load')
 						{
-							console.log(k);
-							$(e).bind(k, function () {
-								change(e, n, o, 'text', f.e[j][k]);
+							change(e, n, o, 'text', true);
+						}
+						else
+						{
+							$(e).bind(f.e[j], function () {
+								change(e, n, o, 'text', false);
 							});
 						}
 					}
@@ -59,7 +62,7 @@
 	$.fn.magicpreview.events = {
 		'text': {
 			'on': ':text, textarea',
-			'e': [{ 'keyup': 1 }, { 'load' : 0 }],
+			'e': ['keyup', 'load'],
 			'f': function (e, o) {
 				var st = ($(e).val().replace(/\n|\r/mg, '') != '') ? $(e).val() : o;
 				st = ( $(e).is('textarea') ) ? st.replace(/\r|\n/mg, '<br />') : st;
@@ -68,14 +71,14 @@
 		},
 		'check': {
 			'on': ':checkbox, :radio',
-			'e': [{ 'click': 1 }, { 'load' : 0 }],
+			'e': ['click', 'load'],
 			'f': function (e, o) {
 				return ($(e).is(':checked')) ? $(e).val() : o ;
 			}
 		},
 		'select': {
 			'on': 'select',
-			'e': [{ 'change': 1 }, { 'load' : 0 }],
+			'e': ['change', 'load'],
 			'f': function (e, o) {
 				return $(e).val();
 			}
@@ -87,7 +90,6 @@
 		'onLoad': true,
 		'onBefore': function () { return true; },
 		'onAfter': function () { return true; },
-		'strBefore': '',
-		'strAfter': ''
+		'formatValue': function (val) { return val; }
 	};
 })( jQuery );

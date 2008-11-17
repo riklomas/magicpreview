@@ -9,14 +9,13 @@
 		<script src="jquery.magicpreview.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(function () {
-				$('form').find(':text, :checkbox, :radio, textarea').magicpreview('p_', {
-					'strBefore': 'hello'
-				});
+				$('form').find(':text, :checkbox, :radio, textarea').magicpreview('p_');
 				
 				$('form select').magicpreview('p_', {
 					'change': 'src',
-					'strBefore': 'images/',
-					'strAfter': '.jpg'
+					'formatValue': function (value) { 
+						return 'images/' + value + '.jpg'
+					}
 				});
 			});
 		</script>
