@@ -9,9 +9,22 @@
 		<script src="jquery.magicpreview.js" type="text/javascript"></script>
 		<script type="text/javascript">
 			$(function () {
-				$('form').find(':text, :checkbox, :radio, textarea, select').magicpreview('p_');
+				// Example 1
+				$('form.example input:text').magicpreview('mp_');
 				
-				$('form select').magicpreview('img_', {
+				// Example 2
+				$('form.photopreview :text').magicpreview('p_');
+				$('form.photopreview :checkbox').magicpreview('p_');
+				$('form.photopreview textarea').magicpreview('p_');
+				$('form.photopreview select').magicpreview('p_');
+
+				$('form.photopreview :radio').magicpreview('p_', {
+					'formatValue': function (value) {
+						return value + '/5';
+					}
+				});
+				$('form.photopreview select').magicpreview('img_', {
+					'child': 'img',
 					'change': 'src',
 					'formatValue': function (value) { 
 						return 'images/' + value + '.jpg'
@@ -19,30 +32,112 @@
 				});
 			});
 		</script>
+		<style type="text/css" media="screen">
+			label { display: block; }
+			.preview { background: #f4f4f4; padding: 10px; float: right; width: 400px; }
+			.preview div#img_select { float: left; width: 180px; }
+			
+			.clear:after { content: "."; display: block; height: 0; clear: both; visibility: hidden; }
+			.clear {display: inline-block;}
+			/* Hides from IE-mac \*/ * html .clear {height: 1%;} .clear {display: block;} /* End hide from IE-mac */
+		</style>
 	</head>
 	<body>
-		<h1>jQuery magicpreview <sup>version 0.0.1</sup></h1>
+		<h2>jQuery magicpreview <sup>version 0.0.1</sup></h2>
 		
-		<div id="p_title">Hello!</div>
-		<div id="p_dave">No</div>
-		<div id="p_rad">Radio</div>
-		<div id="p_selecta">Hello!</div>
-		<div id="p_ta">Hello!</div>
+		<h3>Usage</h3>
 		
-		<p><img src="images/2.jpg" alt="hello" id="img_selecta" /></p>
+<pre>
+$(form_fields).magicpreview(prefix, options);
+</pre>
 		
-		<form action="#" method="post">
-			<p><input type="text" name="title" value="" /></p>
-			<p><input type="checkbox" name="dave" value="Yes" /> Dave</p>
+		<p>To link an element to a form field, you will need the id of the element to be equal to the prefix (see code above) plus the name attribute of the form field.</p>
+		
+		<p>For example, if your prefix was '<strong>mp_</strong>' and the form field was &lt;input type="text" name="<strong>hello</strong>" /&gt;, then the element should be something like &lt;div id="<strong>mp_hello</strong>"&gt;&lt;/div&gt;</p>
+		
+		<h3>Examples</h3>
+		
+		<h4>Example 1</h4>
+		
+		<div class="preview clear">
+			<p id="mp_trythis1">Try typing</p>
+			<p id="mp_trythis2">Try this</p>
+		</div>
+		
+		<form action="#" method="post" class="example">
 			<p>
-				<select name="selecta">
-					<option value="1">1</option>
-					<option value="2">Two</option>
-				</select>
+				<label>Try this: </label>
+				<input type="text" name="trythis1" value="" size="30" />
 			</p>
-			<p><input type="radio" name="rad" value="1" /> 1 <input type="radio" name="rad" value="2" /> 2 <input type="radio" name="rad" value="3" /> 3</p>
-			<p><textarea name="ta" rows="8" cols="40"></textarea></p>
+			<p>
+				<label>Select a photo: </label>
+				<input type="text" name="trythis2" value="" size="30" />
+			</p>
 			<p><input type="submit" value="Submit" /></p>
 		</form>
+		
+		<h4>Example 2</h4>
+		
+		
+		<div class="preview clear">
+			<div id="img_select"><img src="images/1.jpg" alt="hello" /></div>
+			<p>Photo <span id="p_select">1</span> chosen</p>
+			<h2 id="p_title">Photo title</h2>
+			<p id="p_desc">Photo description</p>
+			<p><strong>Creative Commons:</strong> <span id="p_cc">No</span></p>
+			<p><strong>Score:</strong> <span id="p_rating">No rating</span></p>
+		</div>
+		
+		<form action="#" method="post" class="photopreview">
+			<p>
+				<label>Select a photo: </label>
+				<select name="select">
+					<option value="1">Photo 1</option>
+					<option value="2">Photo 2</option>
+					<option value="3">Photo 3</option>
+				</select>
+			</p>
+			<p>
+				<label>Photo title: </label>
+				<input type="text" name="title" value="" size="30" />
+			</p>
+			<p>
+				<label>Photo description: </label>
+				<textarea name="desc" rows="8" cols="40"></textarea>
+			</p>
+			<p>
+				<label><input type="checkbox" name="cc" value="Yes" /> Creative Commons?</label>
+			</p>
+			<p class="ratings">
+				<label>Rating out of 5:</label>
+				<input type="radio" name="rating" value="1" /> 1
+				<input type="radio" name="rating" value="2" /> 2
+				<input type="radio" name="rating" value="3" /> 3
+				<input type="radio" name="rating" value="4" /> 4
+				<input type="radio" name="rating" value="5" /> 5
+			</p>
+			<p><input type="submit" value="Submit" /></p>
+		</form>
+		
+<pre>
+$('form.photopreview :text').magicpreview('p_');
+$('form.photopreview :checkbox').magicpreview('p_');
+$('form.photopreview textarea').magicpreview('p_');
+$('form.photopreview select').magicpreview('p_');
+
+$('form.photopreview :radio').magicpreview('p_', {
+  'formatValue': function (value) {
+   return value + '/5';
+  }
+});
+
+$('form.photopreview select').magicpreview('img_', {
+  'change': 'src',
+  'formatValue': function (value) { 
+    return 'images/' + value + '.jpg'
+  }
+});
+</pre>
+
 	</body>
 </html>

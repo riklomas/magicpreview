@@ -10,8 +10,7 @@
 		str = str || '';
 		options = $.extend({}, $.fn.magicpreview.options, options);
 		
-		var ev = $.fn.magicpreview.events;
-		var len = ev.length;
+		var ev = $.fn.magicpreview.events, len = ev.length;
 		
 		function change (e, n, o, i, onload)
 		{
@@ -21,6 +20,7 @@
 				
 				if (st !== false) 
 				{
+					st = st.replace(/\r|\n/mg, '<br />');
 					st = options.formatValue(st);
 				}
 				else
@@ -28,17 +28,18 @@
 					st = o;
 				}
 				
+				
 				if (options.change == 'html') 
 				{
-					$(n).html(st);
+					n.html(st);
 				}
 				else if (options.change == 'text') 
 				{
-					$(n).text(st);
+					n.text(st);
 				}
 				else
 				{
-					$(n).attr(options.change, st);
+					n.attr(options.change, st);
 				}
 				
 				options.onAfter();
@@ -48,8 +49,27 @@
 		
 		return this.filter(':text, :radio, :checkbox, select, textarea').each(function () {
 			var e = this;
-			var n = '#' + str + $(e).attr('name');
-			var o = $(n).text();
+			if (options.child !== false)
+			{
+				var n = $('#' + str + $(e).attr('name')).find(options.child);
+			}
+			else
+			{
+				var n = $('#' + str + $(e).attr('name'));
+			}
+			
+			if (options.change == 'html') 
+			{
+				var o = n.html();
+			}
+			else if (options.change == 'text') 
+			{
+				var o = n.text();
+			}
+			else
+			{
+				var o = n.attr(options.change);
+			}
 			
 			for (var i = 0; i < len; i++)
 			{
@@ -82,13 +102,7 @@
 			'on': ':text, textarea',
 			'e': ['keyup', 'load'],
 			'f': function (e) {
-				if ($(e).val().replace(/\n|\r/mg, '') !== '') {
-					var st = $(e).val();
-					st = ( $(e).is('textarea') ) ? st.replace(/\r|\n/mg, '<br />') : st;
-					return st;
-				} else {
-					return false;
-				}
+				return ($(e).val().replace(/\n|\r/mg, '') !== '') ? $(e).val() : false;
 			}
 		}, {
 			'on': ':checkbox, :radio',
@@ -100,11 +114,12 @@
 			'on': 'select',
 			'e': ['change', 'load'],
 			'f': function (e) {
-				return $(e).val();
+				return ($(e).attr('value') !== '' || $(e).attr('value') !== 'undefined') ? $(e).attr('value') : false;
 			}
 		}];
 		
 	$.fn.magicpreview.options = {
+		'child': false,
 		'change': 'html',
 		'onLoad': true,
 		'onBefore': function () { return true; },
