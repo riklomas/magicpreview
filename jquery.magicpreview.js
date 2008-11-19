@@ -1,5 +1,5 @@
-(function( $ ){
-	$.fn.magicpreview = function(str, options) {
+(function ($) {
+	$.fn.magicpreview = function (str, options) {
 		
 		if (typeof str === "object" && typeof options === "undefined") // If function(options)
 		{
@@ -12,11 +12,11 @@
 		
 		var ev = $.fn.magicpreview.events, len = ev.length;
 		
-		function change (e, n, o, i, onload)
+		function change(e, n, o, i, onload)
 		{
 			if (options.onBefore() && (options.onLoad || !onload))
 			{
-				var st = ev[i].f(e);
+				var st = ev[i].f(e), orig_st = st;
 				
 				if (st !== false) 
 				{
@@ -28,12 +28,11 @@
 					st = o;
 				}
 				
-				
-				if (options.change == 'html') 
+				if (options.change === 'html') 
 				{
 					n.html(st);
 				}
-				else if (options.change == 'text') 
+				else if (options.change === 'text') 
 				{
 					n.text(st);
 				}
@@ -42,40 +41,41 @@
 					n.attr(options.change, st);
 				}
 				
-				options.onAfter();
+				options.onAfter(orig_st);
 			}
 			return;
 		}
 		
 		return this.filter(':text, :radio, :checkbox, select, textarea').each(function () {
-			var e = this;
+			var e = this, n, o, i;
+			
 			if (options.child !== false)
 			{
-				var n = $('#' + str + $(e).attr('name')).find(options.child);
+				n = $('#' + str + $(e).attr('name')).find(options.child);
 			}
 			else
 			{
-				var n = $('#' + str + $(e).attr('name'));
+				n = $('#' + str + $(e).attr('name'));
 			}
 			
-			if (options.change == 'html') 
+			if (options.change === 'html') 
 			{
-				var o = n.html();
+				o = n.html();
 			}
-			else if (options.change == 'text') 
+			else if (options.change === 'text') 
 			{
-				var o = n.text();
+				o = n.text();
 			}
 			else
 			{
-				var o = n.attr(options.change);
+				o = n.attr(options.change);
 			}
 			
-			for (var i = 0; i < len; i++)
+			for (i = 0; i < len; i++)
 			{
 				if ($(e).is(ev[i].on)) 
 				{
-					e.i = i; // MASSIVE HACK!
+					e.i = i; // Hack!
 					
 					if (typeof ev[i].e !== 'undefined')
 					{
@@ -122,8 +122,14 @@
 		'child': false,
 		'change': 'html',
 		'onLoad': true,
-		'onBefore': function () { return true; },
-		'onAfter': function () { return true; },
-		'formatValue': function (val) { return val; }
+		'onBefore': function () { 
+			return true;
+		},
+		'onAfter': function (val) { 
+			return true; 
+		},
+		'formatValue': function (val) { 
+			return val; 
+		}
 	};
-})( jQuery );
+})(jQuery);

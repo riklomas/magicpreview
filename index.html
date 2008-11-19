@@ -45,80 +45,84 @@
 	<body>
 		<h2>jQuery magicpreview <sup>version 0.0.1</sup></h2>
 		
-		<h3>Usage</h3>
-		
+<h3>What it does</h3>
+
+<p>magicpreview automatically updates selected elements on a page based on form fields. Perfect for previewing forms.</p>
+
+<h3>Usage</h3>
+
 <pre>
 $(form_fields).magicpreview(prefix, options);
 </pre>
-		
-		<p>To link an element to a form field, you will need the id of the element to be equal to the prefix (see code above) plus the name attribute of the form field.</p>
-		
-		<p>For example, if your prefix was '<strong>mp_</strong>' and the form field was &lt;input type="text" name="<strong>hello</strong>" /&gt;, then the element should be something like &lt;div id="<strong>mp_hello</strong>"&gt;&lt;/div&gt;</p>
-		
-		<h3>Examples</h3>
-		
-		<h4>Example 1</h4>
-		
-		<div class="preview clear">
-			<p id="mp_trythis1">Try typing</p>
-			<p id="mp_trythis2">Try this</p>
-		</div>
-		
-		<form action="#" method="post" class="example">
-			<p>
-				<label>Try this: </label>
-				<input type="text" name="trythis1" value="" size="30" />
-			</p>
-			<p>
-				<label>Select a photo: </label>
-				<input type="text" name="trythis2" value="" size="30" />
-			</p>
-			<p><input type="submit" value="Submit" /></p>
-		</form>
-		
-		<h4>Example 2</h4>
-		
-		
-		<div class="preview clear">
-			<div id="img_select"><img src="images/1.jpg" alt="hello" /></div>
-			<p>Photo <span id="p_select">1</span> chosen</p>
-			<h2 id="p_title">Photo title</h2>
-			<p id="p_desc">Photo description</p>
-			<p><strong>Creative Commons:</strong> <span id="p_cc">No</span></p>
-			<p><strong>Score:</strong> <span id="p_rating">No rating</span></p>
-		</div>
-		
-		<form action="#" method="post" class="photopreview">
-			<p>
-				<label>Select a photo: </label>
-				<select name="select">
-					<option value="1">Photo 1</option>
-					<option value="2">Photo 2</option>
-					<option value="3">Photo 3</option>
-				</select>
-			</p>
-			<p>
-				<label>Photo title: </label>
-				<input type="text" name="title" value="" size="30" />
-			</p>
-			<p>
-				<label>Photo description: </label>
-				<textarea name="desc" rows="8" cols="40"></textarea>
-			</p>
-			<p>
-				<label><input type="checkbox" name="cc" value="Yes" /> Creative Commons?</label>
-			</p>
-			<p class="ratings">
-				<label>Rating out of 5:</label>
-				<input type="radio" name="rating" value="1" /> 1
-				<input type="radio" name="rating" value="2" /> 2
-				<input type="radio" name="rating" value="3" /> 3
-				<input type="radio" name="rating" value="4" /> 4
-				<input type="radio" name="rating" value="5" /> 5
-			</p>
-			<p><input type="submit" value="Submit" /></p>
-		</form>
-		
+
+<p>To link an element to a form field, you will need the id of the element to be equal to the prefix (see code above) plus the name attribute of the form field.</p>
+
+<p>For example, if your prefix was '<strong>mp_</strong>' and the form field was &lt;input type="text" name="<strong>hello</strong>" /&gt;, then the element should be something like &lt;div id="<strong>mp_hello</strong>"&gt;&lt;/div&gt;</p>
+
+<h3>Examples</h3>
+
+<h4>Example 1</h4>
+
+<div class="mp_box clear">
+	<div class="preview clear">
+		<p id="mp_trythis1">This should change</p>
+		<p id="mp_trythis2">And this when you type in the form</p>
+	</div>
+
+	<form action="#" method="post" class="mp_form example"><fieldset><ul>
+		<li>
+			<label>Type here: </label>
+			<input type="text" name="trythis1" value="" size="30" />
+		</li>
+		<li>
+			<label>Or here: </label>
+			<input type="text" name="trythis2" value="" size="30" />
+		</li>
+	</ul></fieldset></form>
+</div>
+
+<h4>Example 2</h4>
+
+<div class="mp_box clear">
+	<div class="preview clear">
+		<div id="img_select"><img src="images/1.jpg" alt="hello" /></div>
+		<p>Photo <span id="p_select">1</span> chosen</p>
+		<h2 id="p_title">Photo title</h2>
+		<p id="p_desc">Photo description</p>
+		<p><strong>Creative Commons:</strong> <span id="p_cc">No</span></p>
+		<p><strong>Score:</strong> <span id="p_rating">No rating</span></p>
+	</div>
+
+	<form action="#" method="post" class="mp_form photopreview"><fieldset><ul>
+		<li>
+			<label>Select a photo: </label>
+			<select name="select">
+				<option value="1">Photo 1</option>
+				<option value="2">Photo 2</option>
+				<option value="3">Photo 3</option>
+			</select>
+		</li>
+		<li>
+			<label>Photo title: </label>
+			<input type="text" name="title" value="" size="30" />
+		</li>
+		<li>
+			<textarea name="desc" rows="8" cols="40">Photo description</textarea>
+		</li>
+		<li>
+			<label><input type="checkbox" name="cc" value="Yes" /> Creative Commons?</label>
+		</li>
+		<li class="ratings">
+			<label>Rating out of 5:</label>
+			<input type="radio" name="rating" value="1" /> 1
+			<input type="radio" name="rating" value="2" /> 2
+			<input type="radio" name="rating" value="3" /> 3
+			<input type="radio" name="rating" value="4" /> 4
+			<input type="radio" name="rating" value="5" /> 5
+		</li>
+	</ul></fieldset></form>
+</div>
+
 <pre>
 $('form.photopreview :text').magicpreview('p_');
 $('form.photopreview :checkbox').magicpreview('p_');
@@ -127,7 +131,7 @@ $('form.photopreview select').magicpreview('p_');
 
 $('form.photopreview :radio').magicpreview('p_', {
   'formatValue': function (value) {
-   return value + '/5';
+    return value + '/5';
   }
 });
 
@@ -138,6 +142,34 @@ $('form.photopreview select').magicpreview('img_', {
   }
 });
 </pre>
+
+<h3 id="options">Options</h3>
+
+<dl>
+	<dt>child</dt>
+	<dd>A selector for a child element you want to select, for example if you wanted to pick the span elements in the chosen element, use 'span'</dd>
+	<dd class="default">default: false</dd>
+	
+	<dt>change</dt>
+	<dd>What you want to change on the selected element, can be either 'text', 'html' or any attribute (e.g. 'src', 'alt')</dd>
+	<dd class="default">default: 'html'</dd>
+	
+	<dt>onLoad</dt>
+	<dd>Boolean for whether to run functions on page load</dd>
+	<dd class="default">default: true</dd>
+	
+	<dt>onBefore</dt>
+	<dd>A function to be called before magicpreview runs, return true to run</dd>
+	<dd class="default">default: function () { return true; }</dd>
+	
+	<dt>onAfter</dt>
+	<dd>A function to be called after magicpreview runs, return true to run, can take an argument of the value used in function call</dd>
+	<dd class="default">default: function (val) { return true; }</dd>
+	
+	<dt>formatValue</dt>
+	<dd>A function to be called to format the value in magicpreview</dd>
+	<dd class="default">default: function (val) { return val; }</dd>
+</dl>
 
 	</body>
 </html>
