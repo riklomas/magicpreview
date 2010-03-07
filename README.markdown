@@ -3,13 +3,6 @@
 A [jQuery][jquery_site] based plug-in for automatically updates selected elements on a page based on form fields. 
 Perfect for previewing forms.
 
-<!--
-## Examples
-
-* <http://www.lomalogue.com/jquery/quicksearch/>
-* <http://www.lomalogue.com/jquery/quicksearch/super_table.html>
--->
-
 ## Usage
 
 	$(form_fields).magicpreview(prefix, options);
